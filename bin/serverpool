@@ -1,0 +1,55 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import logging
+import os
+
+LEVEL = logging.DEBUG
+
+logger = logging.getLogger(__file__)
+logger.setLevel(LEVEL)
+logging_root = '/tmp/taskrunner'
+
+if not os.path.exists(logging_root):
+    os.makedirs(logging_root)
+
+fh = logging.FileHandler(os.path.join(logging_root, 'serverpool.log'))
+fh.setLevel(LEVEL)
+
+# ch = logging.StreamHandler()
+# ch.setLevel(LEVEL)
+
+logger.addHandler(fh)
+# logger.addHandler(ch)
+
+
+from taskrunner import config
+from taskrunner.runner import RedisQueue, Jobs, QUEUE_NAME
+
+
+def running_loop(queue, args):
+    while True:
+        command = queue.get()
+        logger.debug(command)
+        if command is None:
+            continue
+        command = command.decode('utf-8')
+        command = command.split()
+        logging.debug(command)
+        if command[0] == 'killserver':
+            break
+        Jobs(command, logger).running()
+
+
+def main():
+    logger.debug('Starting server.')
+    args = config.serverpool_arguments()
+    logger.debug('Argument parsed.')
+    queue = RedisQueue(QUEUE_NAME)
+    logger.debug('Queue created.')
+    running_loop(queue, args)
+    logging.debug('Server exit..')
+
+
+if __name__ == "__main__":
+    main()
