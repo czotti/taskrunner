@@ -16,11 +16,8 @@ if not os.path.exists(logging_root):
 fh = logging.FileHandler(os.path.join(logging_root, 'serverpool.log'))
 fh.setLevel(LEVEL)
 
-# ch = logging.StreamHandler()
-# ch.setLevel(LEVEL)
 
 logger.addHandler(fh)
-# logger.addHandler(ch)
 
 
 from taskrunner import config

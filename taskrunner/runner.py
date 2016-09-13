@@ -89,7 +89,7 @@ class Jobs(object):
     def __init__(self, command, logger, base_dir="TASK_RUNNER"):
         self.command = command
         self.logger = logger
-        self.out_dir = os.path.join(base_dir, "{}_{}".format(uuid.uuid4(), command[2]))
+        self.out_dir = os.path.join(base_dir, "{}_{}".format(uuid.uuid4(), command[0]))
         if not os.path.exists(self.out_dir):
             os.makedirs(self.out_dir)
         self.out_file = os.path.join(self.out_dir, 'command.out')
