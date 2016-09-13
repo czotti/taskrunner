@@ -1,3 +1,5 @@
 # Taskrunner
 
-Use it on top of task spooler.
+Use redis on localhost to send and receive task.
+
+Far from perfect.
